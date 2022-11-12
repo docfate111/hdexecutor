@@ -1,37 +1,37 @@
 use hdrepresentation::*;
-use std::env;
 use penguincrab::*;
+use std::env;
 use std::io::{Error, ErrorKind};
 
 pub fn exec(p: &Program, image_path: String) -> Result<(), std::io::Error> {
-        let new_path = String::from(image_path.clone());
-        let server = LklSetup::new(LklSetupArgs {
-            filename: new_path.clone(),
-            boot_settings: Some(String::from("mem=128M\0")),
-            partition_num: None,
-            filesystem_type: None,
-            filesystem_options: None,
-            on_panic: None,
-	    print: None,
-        })
-        .unwrap();
-        for sys in p.syscalls.iter() {
-            match exec_syscall(p, sys, server.mount_point.clone()) {
-                Ok(ret_val) => {
-                    if ret_val < 0 {
-                        print_error(&(ret_val as i32));
-                    }
-                    println!("{} {}", sys.nr, ret_val);
+    let new_path = String::from(image_path.clone());
+    let server = LklSetup::new(LklSetupArgs {
+        filename: new_path.clone(),
+        boot_settings: Some(String::from("mem=128M\0")),
+        partition_num: None,
+        filesystem_type: None,
+        filesystem_options: None,
+        on_panic: None,
+        print: None,
+    })
+    .unwrap();
+    for sys in p.syscalls.iter() {
+        match exec_syscall(p, sys, server.mount_point.clone()) {
+            Ok(ret_val) => {
+                if ret_val < 0 {
+                    print_error(&(ret_val as i32));
                 }
-                Err(e) => {
-                    eprintln!("{e}");
-                }
+                println!("{} {}", sys.nr, ret_val);
+            }
+            Err(e) => {
+                eprintln!("{e}");
             }
         }
-        for fd in p.active_fds.iter() {
-            lkl_sys_close(*fd as i32);
-        }
-        Ok(())
+    }
+    for fd in p.active_fds.iter() {
+        lkl_sys_close(*fd as i32);
+    }
+    Ok(())
 }
 
 pub fn exec_syscall(prog: &Program, syscall: &Syscall, mount_point: String) -> Result<i64, String> {
@@ -246,12 +246,15 @@ fn var_to_vec(v: &VariableType) -> Result<Vec<u8>, String> {
 }
 
 fn main() -> Result<(), std::io::Error> {
-	let args: Vec<String> = env::args().collect();
-    	if args.len() != 3 {
-		eprintln!("Usage: {} [deserialized program] [filesystem image]", &args[0]);
-		return Err(Error::new(ErrorKind::Other, "invalid arguments"));
-	}
-	let f = Program::from_path(&args[1]);
-	exec(&f, args[2].clone())?;
-	Ok(())
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 3 {
+        eprintln!(
+            "Usage: {} [deserialized program] [filesystem image]",
+            &args[0]
+        );
+        return Err(Error::new(ErrorKind::Other, "invalid arguments"));
+    }
+    let f = Program::from_path(&args[1]);
+    exec(&f, args[2].clone())?;
+    Ok(())
 }

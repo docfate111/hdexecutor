@@ -1,0 +1,2 @@
+cargo:rustc-link-search=/home/t/.cargo/registry/src/github.com-1ecc6299db9ec823/penguincrab-0.1.4
+cargo:rustc-link-lib=lkl

@@ -6,5 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hdrepresentation = "0.1.2"
-penguincrab = "0.1.4"
+hdrepresentation = "0.1.82"
+penguincrab = "0.1.2"

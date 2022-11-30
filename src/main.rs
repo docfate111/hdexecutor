@@ -19,12 +19,14 @@ pub fn exec(p: &Program, image_path: String, fs_type: String) -> Result<(), std:
         match exec_syscall(p, sys, server.mount_point.clone()) {
             Ok(ret_val) => {
                 if ret_val < 0 {
-                    print_error(&(ret_val as i32));
+                    eprintln!("{} => {ret_val} {}", get_syscall(p, sys),
+                    strerror(&(ret_val as i32)).unwrap());
+                } else {
+                println!("{} => {ret_val}", get_syscall(p, sys));
                 }
-                println!("{} {}", sys.nr, ret_val);
             }
             Err(e) => {
-                eprintln!("{e}");
+                eprintln!("exec_syscall failed {} => {e}", get_syscall(p, sys));
             }
         }
     }
@@ -156,13 +158,15 @@ pub fn exec_syscall(prog: &Program, syscall: &Syscall, mount_point: String) -> R
             to_cstr(&var_to_path(&vars[0], &mount_point)?).unwrap(),
             to_cstr(&var_to_path(&vars[1], &mount_point)?).unwrap(),
         )),
-        SysNo::Setxattr => Ok(lkl_sys_setxattr(
+        SysNo::Setxattr => { 
+            Ok(lkl_sys_setxattr(
             to_cstr(&var_to_path(&vars[0], &mount_point)?).unwrap(),
             to_cstr(&var_to_str(&vars[1])?).unwrap(),
-            &var_to_vec(&vars[2])?[..],
+            to_cstr(&var_to_str(&vars[2])?).unwrap(),
             var_to_usize(&vars[3])?,
             var_to_u32(&vars[4])?,
-        )),
+        ))
+        },
         SysNo::Listxattr => Ok(lkl_sys_listxattr(
             to_cstr(&var_to_path(&vars[0], &mount_point)?).unwrap(),
             &mut var_to_vec(&vars[1])?[..],
@@ -179,7 +183,11 @@ pub fn exec_syscall(prog: &Program, syscall: &Syscall, mount_point: String) -> R
 
 fn var_to_str(v: &VariableType) -> Result<String, String> {
     match v {
-        VariableType::Str(s) => Ok(s.to_string()),
+        VariableType::Str(s) => {
+            let mut s_with_nul = String::from(s);
+            s_with_nul.push_str("\0");
+            Ok(s_with_nul.to_owned())
+        },
         _ => Err(format!("failed to convert {:?} to str", v)),
     }
 }

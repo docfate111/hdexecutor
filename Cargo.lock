@@ -130,9 +130,9 @@ dependencies = [
 
 [[package]]
 name = "penguincrab"
-version = "0.1.61"
+version = "0.1.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ffb1a3d29ae85077bd215e91fc2398ed3f3edb324a935b12dd65941a5d1e133"
+checksum = "7042f177328e1910966d179a7c08e86ae5c2b3c4a1ca5dd6786e450c0204f41a"
 dependencies = [
  "more-asserts",
  "nix",

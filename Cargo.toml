@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 hdrepresentation = "0.1.82"
-penguincrab = "0.1.61"
+penguincrab = "0.1.62"

@@ -21,6 +21,8 @@ fn main() {
             .status()
             .unwrap();
     }
-    println!("cargo:rustc-link-search={}", project_dir); // the "-L" flag
+    println!("cargo:rustc-link-search=native=linux/tools/lkl");
+   //println!("cargo:rustc-link-search={}", project_dir); // the "-L" flag
     println!("cargo:rustc-link-lib=lkl"); // the "-l" flag
+   // println!("cargo:rustc-env=LD_LIBRARY_PATH=.");*/
 }

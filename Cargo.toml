@@ -1,7 +1,7 @@
 [package]
 name = "hdexecutor"
 authors = ["docfate111"]
-version = "0.1.1"
+version = "0.1.10"
 edition = "2021"
 description = "execute a HYDRAulic damnation represention of a program with a filesystem image"
 license = "MIT"

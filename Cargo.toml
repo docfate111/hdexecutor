@@ -1,9 +1,11 @@
 [package]
 name = "hdexecutor"
+authors = ["docfate111"]
 version = "0.1.1"
 edition = "2021"
 description = "execute a HYDRAulic damnation represention of a program with a filesystem image"
 license = "MIT"
+readme = "README.md"
 [dependencies]
 hdrepresentation = "0.1.82"
 penguincrab = "0.1.62"

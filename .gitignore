@@ -3,3 +3,5 @@ target
 linux
 linux/*
 linux/
+liblkl.so
+*.so

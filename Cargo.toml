@@ -8,4 +8,4 @@ license = "MIT"
 readme = "README.md"
 [dependencies]
 hdrepresentation = "0.1.82"
-penguincrab = "0.1.62"
+penguincrab = "0.1.63"

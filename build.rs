@@ -6,12 +6,12 @@ fn main() {
     let project_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
     if !Path::new("./liblkl.so").exists() {
         Command::new("git")
-            .args(&["clone", "https://github.com/lkl/linux.git"])
+            .args(&["clone", "https://github.com/docfate111/linux-lkl.git", "linux"])
             .current_dir(&Path::new(&project_dir))
             .status()
             .unwrap();
-        Command::new("make")
-            .args(&["ARCH=lkl", "-C", "linux/tools/lkl"])
+        Command::new("CC=libafl_cc")
+            .args(&["make", "-C", "linux/tools/lkl", "LLVM=1", "CROSS_COMPILE=x86_64-linux-gnu", "-j16"])
             .current_dir(&Path::new(&project_dir))
             .status()
             .unwrap();
@@ -22,7 +22,7 @@ fn main() {
             .unwrap();
     }
     println!("cargo:rustc-link-search=native=linux/tools/lkl");
-   //println!("cargo:rustc-link-search={}", project_dir); // the "-L" flag
-    println!("cargo:rustc-link-lib=lkl"); // the "-l" flag
-   // println!("cargo:rustc-env=LD_LIBRARY_PATH=.");*/
+    //println!("cargo:rustc-link-search={}", project_dir); // the "-L" flag
+      println!("cargo:rustc-link-lib=lkl"); // the "-l" flag
+    // println!("cargo:rustc-env=LD_LIBRARY_PATH=.");*/
 }

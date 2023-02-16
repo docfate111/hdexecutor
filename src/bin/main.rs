@@ -12,7 +12,10 @@ fn main() -> Result<(), std::io::Error> {
         );
         return Err(Error::new(ErrorKind::Other, "invalid arguments"));
     }
-    let f = Program::from_path(&args[1]);
-    exec(&f, args[2].clone(), args[3].clone())?;
+    if let Ok(f) = Program::from_path(&args[1]) {
+    	exec(&f, args[2].clone(), args[3].clone())?;
+    } else {
+	return Err(Error::new(ErrorKind::Other, "invalid json"));
+    }
     Ok(())
 }

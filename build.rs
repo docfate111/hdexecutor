@@ -10,8 +10,8 @@ fn main() {
             .current_dir(&Path::new(&project_dir))
             .status()
             .unwrap();
-        Command::new("CC=libafl_cc")
-            .args(&["make", "-C", "linux/tools/lkl", "LLVM=1", "CROSS_COMPILE=x86_64-linux-gnu", "-j16"])
+        Command::new("make")
+            .args(&["-C", "linux/tools/lkl", "ARCH=lkl", "-j16"])
             .current_dir(&Path::new(&project_dir))
             .status()
             .unwrap();
@@ -23,6 +23,6 @@ fn main() {
     }
     println!("cargo:rustc-link-search=native=linux/tools/lkl");
     //println!("cargo:rustc-link-search={}", project_dir); // the "-L" flag
-      println!("cargo:rustc-link-lib=lkl"); // the "-l" flag
+    println!("cargo:rustc-link-lib=lkl"); // the "-l" flag
     // println!("cargo:rustc-env=LD_LIBRARY_PATH=.");*/
 }
